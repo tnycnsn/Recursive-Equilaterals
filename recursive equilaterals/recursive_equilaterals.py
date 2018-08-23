@@ -1,10 +1,11 @@
 import numpy as np
 import pygame
 import sys
+import time
 
 edge_norm = 80
 
-pos_vec = np.array([350, 600])
+pos_vec = np.array([350, 500])
 point2_vec = np.array([-100, 0])
 
 point2 = pos_vec + point2_vec
@@ -32,10 +33,12 @@ for n in range(lower_bound, upper_bound+1):
 	polygons.append(point_set)
 
 
-screen = pygame.display.set_mode((700, 700))
+screen = pygame.display.set_mode((625, 550))
 RED = (255, 0, 0)
 WHITE = (255, 255, 255)
 
+direction = -1
+current = 0
 
 while True: 
 
@@ -46,11 +49,18 @@ while True:
 	
 	screen.fill(WHITE)
 	
-	for polygon in polygons:
+	if(current == 0 or current == len(polygons)):
+		direction *= -1
+		
+	off_set = np.array(polygons)[:current+1]
+
+	for polygon in off_set:
 		n = len(polygon)
 		for i in range(n+1):
 			pygame.draw.line(screen, RED, (polygon[i%n][0], polygon[i%n][1]), (polygon[(i+1)%n][0], polygon[(i+1)%n][1]), 1)	
 	
-		
+	current += direction
+	time.sleep(0.1)
+	
 	pygame.display.flip()
 
